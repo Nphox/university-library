@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.util.Set;
 
 public class DBUtils {
     public static void selectAllFromUsers(java.sql.Connection con){
@@ -13,6 +14,34 @@ public class DBUtils {
                         resultSet.getString("id") + "   " +
                                 resultSet.getString("name") + " " +
                                 resultSet.getString("age"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+
+        } finally {
+            try{
+                if(preparedStatement != null){
+                    preparedStatement.close();
+                }
+
+            } catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void insertIntoBooks(java.sql.Connection con, Set<BookEntity> books){
+        PreparedStatement preparedStatement = null;
+
+        try {
+            preparedStatement = con.prepareStatement("INSERT INTO Books (id, bookName, publicationYear, publisher) VALUES (?, ?, ?, ?);");
+            for (BookEntity book : books) {
+                preparedStatement.setInt(1, book.getId());
+                preparedStatement.setString(2, book.getBookName());
+                preparedStatement.setString(3, book.getPublicationYear());
+                preparedStatement.setString(4, book.getPublisher());
+                preparedStatement.executeQuery();
             }
 
         } catch (SQLException e) {
