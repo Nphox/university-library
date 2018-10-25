@@ -35,13 +35,12 @@ public class DBUtils {
         PreparedStatement preparedStatement = null;
 
         try {
-            preparedStatement = con.prepareStatement("INSERT INTO Books (id, bookName, publicationYear, publisher) VALUES (?, ?, ?, ?);");
+            preparedStatement = con.prepareStatement("INSERT INTO Books (bookName, publicationYear, publisher) VALUES (?, ?, ?);");
             for (BookEntity book : books) {
-                preparedStatement.setInt(1, book.getId());
-                preparedStatement.setString(2, book.getBookName());
-                preparedStatement.setString(3, book.getPublicationYear());
-                preparedStatement.setString(4, book.getPublisher());
-                preparedStatement.executeQuery();
+                preparedStatement.setString(1, book.getBookName());
+                preparedStatement.setString(2, book.getPublicationYear());
+                preparedStatement.setString(3, book.getPublisher());
+                preparedStatement.executeUpdate();
             }
 
         } catch (SQLException e) {

@@ -11,6 +11,16 @@ public class BookEntity {
         this.publisher = publisher;
     }
 
+    public BookEntity(String bookName, String publicationYear, String publisher) {
+        this.bookName = bookName;
+        this.publicationYear = publicationYear;
+        this.publisher = publisher;
+    }
+
+    public String toString(){
+        return this.bookName + " " + this.publicationYear + " " + this.publisher;
+    }
+
     public int getId() {
         return id;
     }
