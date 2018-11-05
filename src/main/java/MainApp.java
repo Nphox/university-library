@@ -1,12 +1,13 @@
 import java.sql.Connection;
-import java.util.Set;
+import java.util.List;
 
 
 public class MainApp {
-    public static void printBooks(Set<BookEntity> set){
-        System.out.println("Size set: " + set.size());
-        for (BookEntity book : set) {
-            System.out.println(book.toString());
+
+    public static void printTableEntities(List<TableEntity> list){
+        System.out.println("Size set: " + list.size());
+        for (TableEntity entity : list) {
+            System.out.println(entity.toString());
         }
     }
 
@@ -15,20 +16,20 @@ public class MainApp {
         String url = "jdbc:mysql://localhost:3306/libraryDB";
         String login = "root";
         String password = "root";
-        String filePath = "/home/nphox/Документы/books.xls";
+        String filePath = "/home/nphox/Документы/prepared-data.xls";
 
         Connection connection = DBUtils.getConnection(driverName, url, login, password);
 
-        Set<BookEntity> books = null;
+        List<TableEntity> tableEntities = null;
 
         try{
-            books = ExcelParser.parse(filePath);
+            tableEntities = ExcelParser.parse(filePath);
         }
         catch (IllegalArgumentException e){
             e.printStackTrace();
         }
 
-        DBUtils.insertIntoBooks(connection, books);
+        printTableEntities(tableEntities);
         DBUtils.closeConnection(connection);
     }
 }

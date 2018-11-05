@@ -1,5 +1,4 @@
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -10,8 +9,9 @@ import java.io.InputStream;
 import java.util.*;
 
 public class ExcelParser {
-    public static Set<BookEntity> parse(String fileName) throws IllegalArgumentException{
-        Set<BookEntity> set = new HashSet<BookEntity>();
+
+    public static List<TableEntity> parse(String fileName) throws IllegalArgumentException{
+        List<TableEntity> list = new ArrayList<TableEntity>();
         InputStream inputStream = null;
         HSSFWorkbook workBook = null;
 
@@ -28,7 +28,7 @@ public class ExcelParser {
         while (rowIterator.hasNext()) {
             Row row = rowIterator.next();
 
-            if(row.getLastCellNum() != 3){
+            if(row.getLastCellNum() != 7){
                 throw new IllegalArgumentException("Wrong file format: illegal number of cells.");
             }
 
@@ -50,17 +50,22 @@ public class ExcelParser {
                         break;
 
                     default:
+                        stack.push(null);
                         break;
                 }
             }
 
-            String publisher = stack.pop();
-            String year = stack.pop();
+            String booksOnTheHands = stack.pop();
+            String realCountBooks = stack.pop();
+            String publicationYear = stack.pop();
+            String type = stack.pop();
             String bookName = stack.pop();
+            String author = stack.pop();
+            String rowNum = stack.pop();
 
-            set.add(new BookEntity(bookName, year, publisher));
+            list.add(new TableEntity(rowNum, author, bookName, type, publicationYear, realCountBooks, booksOnTheHands));
         }
 
-        return set;
+        return list;
     }
 }
